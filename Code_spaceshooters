@@ -1,0 +1,41 @@
+import pygame
+from os.path import join
+from random import randint
+pygame.init()
+Window_Width,Window_Height=1280,720
+#display surface is the main surface is single
+display_surface=pygame.display.set_mode((Window_Width,Window_Height))
+pygame.display.set_caption('Space')
+#pygame.display.set_icon()
+running=True
+##structure of the game, images, surfaces, build of the game
+#surface can be images...surface over surface or layer over layer
+surf=pygame.Surface((100,200))#(w,h) needs to be attached to the display surface. Cannot make a change on its own. needs to be called blit-> block image transfer surface over surface
+surf.fill('orange')
+x=100
+y=150
+#import an image
+#path=join('images','player.png')
+#print(path)#peints the path
+player_surface=pygame.image.load(join('images','player.png')).convert_alpha()#this is a relative path, which is dependent on the project. we can use an absolute path that would directly change location should the path be placed oputside of the mjain project which is space shooters i adfded r for it to rerad the unicode bertter, to makje thje code robust and not dependent of the slash used, canj use the path join function
+star_surf=pygame.image.load(join('images','star.png')).convert_alpha()
+star_pos=[(randint(0,Window_Width),randint(0,Window_Height)) for i in range(20)]
+#play/ movement/ updating of the game/place it within while to insert it opver the main surface
+while running:
+    #event loop 
+    for event in pygame.event.get():
+          if event.type==pygame.QUIT:
+            running=False
+            
+    #draw the game
+    display_surface.fill('darkslategray4')# if this is removed there is no base surface, so the action is different, pygame simply draws the image surface on top of one another, creating the effect of a loading bar?? cant see the last frame?
+    for pos in star_pos:
+                 display_surface.blit(star_surf, pos)
+                #display_surface.blit(star_surf,(randit(0,Window_Width),randit(0,Window_Height)))#x and y
+
+    x+=0.2 #it has to be under while loop as it takes the processor speed for while loop, which may be slower than for loop, however the x icrements probably 1 unit more than the natural speed of while loop, basic animation
+    display_surface.blit(player_surface,(x,y))# surface is called and a target position is assigned search up tuple  only tuple is used? surface is updated with the image
+
+    pygame.display.update()#why was flip changed to update
+    pygame.display.flip()
+pygame.quit()
